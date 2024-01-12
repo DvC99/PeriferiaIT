@@ -1,20 +1,27 @@
-require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const dbConnect = require("./config/mongo")
-const app = express()
-const port =  process.env.PORT || 3000
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import { json } from "express";
+import routes from './app/routes/index.js';
+import dbConnect2 from "./config/mongo.js";
+import dbConnect from "./config/posgress.js";
 
 
-app.use(cors())
-app.use(express.json())
+
+const app = express();
+const port = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(json());
+
 /**
- * Aqui se hace la invocacion de las rutas o enpoints
+ * Aquí se hace la invocación de las rutas o endpoints
  * de toda la API Rest.
  */
-app.use('/api/1/', require('./app/routes'))
+app.use('/api/1/', routes);
 
-dbConnect()
+//dbConnect();
+
 app.listen(port, () => {
-    console.log (`Run server http://localhost:${port}`)
+    console.log(`Run server http://localhost:${port}`);
 });

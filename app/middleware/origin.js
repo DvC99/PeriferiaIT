@@ -8,4 +8,4 @@ const checkOrigin = (req, res, next) => {
     }
 }
 
-module.exports = checkOrigin
+export default checkOrigin

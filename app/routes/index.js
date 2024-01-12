@@ -1,27 +1,40 @@
-const express = require("express")
-const router = express.Router()
-const fs = require("fs")
+import { Router } from "express";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import { readdirSync } from "fs";
 
-const pathRouter = `${__dirname}`
+const router = Router();
+
+// Usa import.meta.url para obtener la URL del módulo actual
+const currentModuleUrl = new URL(import.meta.url);
+// Convierte la URL en una ruta de archivo
+const currentModulePath = fileURLToPath(currentModuleUrl);
+// Obtiene el directorio del módulo actual
+const pathRouter = dirname(currentModulePath);
 
 const removeExtension = (fileName) => {
-    return fileName.split('.').shift()
+    return fileName.split('.').shift();
+};
+
+for (const file of readdirSync(pathRouter)) {
+    //const fileWithoutExt = removeExtension(file);
+    const skip = ['index.js'].includes(file);
+
+    if (!skip) {
+        try {
+            const routeModule = await import(`./${file}`);
+            router.use(`/${file}`, routeModule.default);
+            console.log('CARGA RUTA ---->', file);
+        } catch (error) {
+            console.error(`Error loading route ${file}:`, error);
+        }
+    }
 }
 
-fs.readdirSync(pathRouter).filter((file) => {
-    const fileWhitOutExt = removeExtension(file);
-    const skip = ['index'].includes(fileWhitOutExt)
-    if (!skip) {
-        router.use(`/${fileWhitOutExt}`, require(`./${fileWhitOutExt}`))
-        console.log('CARGA RUTA ---->', fileWhitOutExt)
-    }
-})
-
 router.get('*', (req, res) => {
-    res.status(404)
-    res.send({
+    res.status(404).send({
         error: 'Not found'
-    })
-})
+    });
+});
 
-module.exports = router
+export default router;

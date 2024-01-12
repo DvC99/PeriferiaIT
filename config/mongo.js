@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import { connect } from "mongoose";
 
 const dbConnect = async () => {
     const DB_URI = process.env.DB_URI;
@@ -7,11 +7,12 @@ const dbConnect = async () => {
         useUnifiedTopology: true,
     };
     try {
-        await mongoose.connect(DB_URI, options);
+        await connect(DB_URI, options);
         console.log('Connected to the database');
+        // Your further code logic here
     } catch (error) {
         console.error('Error connecting to the database', error);
     }
 };
 
-module.exports = dbConnect;
+export default dbConnect;

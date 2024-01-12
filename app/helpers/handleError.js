@@ -4,4 +4,4 @@ const httpError = (res, err) => {
     res.send({error: err})
 }
 
-module.exports = {httpError}
+export default {httpError}
