@@ -3,7 +3,6 @@ import express from "express";
 import cors from "cors";
 import { json } from "express";
 import routes from './app/routes/index.js';
-import dbConnect2 from "./config/mongo.js";
 import dbConnect from "./config/posgress.js";
 
 
@@ -20,7 +19,7 @@ app.use(json());
  */
 app.use('/api/1/', routes);
 
-//dbConnect();
+dbConnect();
 
 app.listen(port, () => {
     console.log(`Run server http://localhost:${port}`);
