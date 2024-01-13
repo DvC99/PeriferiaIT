@@ -17,14 +17,14 @@ const removeExtension = (fileName) => {
 };
 
 for (const file of readdirSync(pathRouter)) {
-    //const fileWithoutExt = removeExtension(file);
     const skip = ['index.js'].includes(file);
 
     if (!skip) {
         try {
             const routeModule = await import(`./${file}`);
-            router.use(`/${file}`, routeModule.default);
-            console.log('CARGA RUTA ---->', file);
+            const fileWithoutExt = removeExtension(file);
+            router.use(`/${fileWithoutExt}`, routeModule.default);
+            console.log('CARGA RUTA ---->', fileWithoutExt);
         } catch (error) {
             console.error(`Error loading route ${file}:`, error);
         }

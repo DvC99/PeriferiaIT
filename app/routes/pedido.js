@@ -1,11 +1,12 @@
 import { Router } from "express"
-const router = Router()
 import {getItems, getItem, createItem, updateItem, deleteItem} from '../controllers/pedido.js'
+
+const router = Router()
 
 router.get('/', getItems)
 router.get('/:id', getItem)
 router.post('/', createItem)
-router.patch('/:id',updateItem)
+router.put('/:id',updateItem)
 router.delete('/:id',deleteItem)
 
 export default router
