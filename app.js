@@ -19,7 +19,9 @@ app.use('/api/1/', routes);
 /**
  * Aquí se hace la connect a la DB
  */
-dbConnect();
+setTimeout(() => {
+    dbConnect();
+}, 1000);
 
 app.listen(port, () => {
     console.log(`Run server http://localhost:${port}`);

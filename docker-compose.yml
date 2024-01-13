@@ -1,23 +1,13 @@
 version: '3.8'
 
 services:
-  postgresDB:
-    image: postgres:latest
-    env_file: ./.env
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
-      POSTGRES_HOST: ${DB_HOST}
-    ports: 
-      - "5432:5432"
-
   app:
     build: .
-    ports: 
+    ports:
       - "3001:3001"
-    depends_on: 
-      - postgresDB
+    depends_on:
+      postgresDB:
+        condition: service_started
     env_file: ./.env
     environment:
       PORT: ${PORT}
@@ -26,3 +16,14 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       DB_HOST: ${DB_HOST}
+
+  postgresDB:
+    image: postgres:latest
+    env_file: ./.env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_HOST: ${DB_HOST}
+    ports:
+      - "5432:5432"
