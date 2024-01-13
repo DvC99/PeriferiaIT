@@ -22,13 +22,8 @@ export const getItem = async (req, res) => {
 
 export const createItem = async (req, res) => {
     try {
-        const {ClienteId,RestauranteId,fechaPedido, estado} = req.body
-        const newPedido = await Pedido.create({
-            ClienteId,
-            RestauranteId,
-            fechaPedido,
-            estado
-        })
+        const {ClienteId, RestauranteId, fechaPedido, estado} = req.body
+        const newPedido = await Pedido.create({ClienteId, RestauranteId, fechaPedido, estado})
         res.json(newPedido)
     } catch (e) {
         httpError(res, e)
@@ -38,13 +33,9 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
     try {
         const {id} = req.params
-        const {ClienteId ,RestauranteId ,fechaPedido, estado} = req.body
+        const pedido = await Pedido.findOne(id)
 
-        const pedido = await Pedido.findByPk(id)
-        pedido.ClienteId = ClienteId ? ClienteId : pedido.ClienteId
-        pedido.RestauranteId = RestauranteId ? ClienteId : pedido.RestauranteId
-        pedido.fechaPedido = fechaPedido ? fechaPedido : pedido.fechaPedido
-        pedido.estado = estado ? estado : pedido.estado
+        pedido.set(req.body)
         await pedido.save()
 
         res.json(pedido)

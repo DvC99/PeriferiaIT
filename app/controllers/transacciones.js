@@ -1,10 +1,10 @@
 import httpError from '../helpers/handleError.js'
-import Restaurante from '../models/restaurante.js'
+import Transacciones from '../models/transacciones.js'
 
 export const getItems = async (req, res) => {
     try {
-        const restaurantes = await Restaurante.findAll()
-        res.json(restaurantes)
+        const transacciones = await Transacciones.findAll()
+        res.json(transacciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -13,8 +13,8 @@ export const getItems = async (req, res) => {
 export const getItem = async (req, res) => {
     try {
         const {id} = req.params
-        const restaurantes = await Restaurante.findByPk(id)
-        res.json(restaurantes)
+        const transacciones = await Transacciones.findByPk(id)
+        res.json(transacciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -22,9 +22,9 @@ export const getItem = async (req, res) => {
 
 export const createItem = async (req, res) => {
     try {
-        const {nombre, disponibilidad} = req.body
-        const newRestaurante = await Restaurante.create({nombre, disponibilidad})
-        res.json(newRestaurante)
+        const {monto, metodoPago, estado, PedidoId} = req.body
+        const newTransacciones = await Transacciones.create({monto, metodoPago, estado, PedidoId})
+        res.json(newTransacciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -33,11 +33,12 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
     try {
         const {id} = req.params
-        const restaurante = await Restaurante.findOne(id)
-        restaurante.set(req.body)
-        await restaurante.save()
+        const transacciones = await Transacciones.findOne(id)
 
-        res.json(restaurante)
+        transacciones.set(req.body)
+        await transacciones.save()
+
+        res.json(transacciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -46,7 +47,7 @@ export const updateItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
     try {
         const {id} = req.params
-        await Restaurante.destroy({
+        await Transacciones.destroy({
             where:{
                 id:id
             },

@@ -23,10 +23,7 @@ export const getItem = async (req, res) => {
 export const createItem = async (req, res) => {
     try {
         const {nombre, direccion} = req.body
-        const newCliente = await Cliente.create({
-            nombre,
-            direccion
-        })
+        const newCliente = await Cliente.create({nombre, direccion})
         res.json(newCliente)
     } catch (e) {
         httpError(res, e)
@@ -36,12 +33,8 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
     try {
         const {id} = req.params
-        console.log(id)
-        const {nombre, direccion} = req.body
-
-        const cliente = await Cliente.findByPk(id)
-        cliente.nombre = nombre ? nombre : cliente.nombre
-        cliente.direccion = direccion ? direccion : cliente.direccion
+        const cliente = await Cliente.findOne(id)
+        cliente.set(req.body)
         await cliente.save()
 
         res.json(cliente)

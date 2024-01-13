@@ -1,10 +1,10 @@
 import httpError from '../helpers/handleError.js'
-import Restaurante from '../models/restaurante.js'
+import Notificaciones from '../models/notificacion.js'
 
 export const getItems = async (req, res) => {
     try {
-        const restaurantes = await Restaurante.findAll()
-        res.json(restaurantes)
+        const notificaciones = await Notificaciones.findAll()
+        res.json(notificaciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -13,8 +13,8 @@ export const getItems = async (req, res) => {
 export const getItem = async (req, res) => {
     try {
         const {id} = req.params
-        const restaurantes = await Restaurante.findByPk(id)
-        res.json(restaurantes)
+        const notificaciones = await Notificaciones.findByPk(id)
+        res.json(notificaciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -22,9 +22,9 @@ export const getItem = async (req, res) => {
 
 export const createItem = async (req, res) => {
     try {
-        const {nombre, disponibilidad} = req.body
-        const newRestaurante = await Restaurante.create({nombre, disponibilidad})
-        res.json(newRestaurante)
+        const {mensaje, tipo, ClienteId} = req.body
+        const newNotificaciones = await Notificaciones.create({mensaje, tipo, ClienteId})
+        res.json(newNotificaciones)
     } catch (e) {
         httpError(res, e)
     }
@@ -33,11 +33,12 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
     try {
         const {id} = req.params
-        const restaurante = await Restaurante.findOne(id)
-        restaurante.set(req.body)
-        await restaurante.save()
+        const notificacion = await Notificaciones.findOne(id)
 
-        res.json(restaurante)
+        notificacion.set(req.body)
+        await notificacion.save()
+
+        res.json(notificacion)
     } catch (e) {
         httpError(res, e)
     }
@@ -46,7 +47,7 @@ export const updateItem = async (req, res) => {
 export const deleteItem = async (req, res) => {
     try {
         const {id} = req.params
-        await Restaurante.destroy({
+        await Notificaciones.destroy({
             where:{
                 id:id
             },

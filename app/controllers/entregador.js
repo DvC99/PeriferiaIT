@@ -22,11 +22,8 @@ export const getItem = async (req, res) => {
 
 export const createItem = async (req, res) => {
     try {
-        const {nombre, direccion} = req.body
-        const newEntregador = await Entregador.create({
-            nombre,
-            direccion
-        })
+        const {nombre, vehiculo} = req.body
+        const newEntregador = await Entregador.create({nombre, vehiculo})
         res.json(newEntregador)
     } catch (e) {
         httpError(res, e)
@@ -36,15 +33,11 @@ export const createItem = async (req, res) => {
 export const updateItem = async (req, res) => {
     try {
         const {id} = req.params
-        console.log(id)
-        const {nombre, direccion} = req.body
+        const entregador = await Entregador.findOne(id)
+        entregador.set(req.body)
+        await entregador.save()
 
-        const cliente = await Entregador.findByPk(id)
-        cliente.nombre = nombre ? nombre : cliente.nombre
-        cliente.direccion = direccion ? direccion : cliente.direccion
-        await cliente.save()
-
-        res.json(cliente)
+        res.json(entregador)
     } catch (e) {
         httpError(res, e)
     }
